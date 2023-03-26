@@ -1,0 +1,101 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{blindtext}
+\usepackage{graphicx}
+\usepackage[ruled, linesnumbered]{algorithm2e}
+\usepackage{algorithmic}
+\graphicspath{ {./tables/} }
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=20mm,
+ top=20mm,
+ }
+
+\title{CS301 Homework 0}
+\author{Yağız Kılıçarslan}
+\date{October 2022}
+
+\begin{document}
+
+\maketitle
+
+\section{Stable Marriage Problem}
+    \begin{itemize}
+        \item[i.] Define SMP as a computational problem: What is the input? What is the output? 
+        
+        \begin{description}
+            \item \textbf{Input:} Two equal sized list of elements $<a_1, a_2 .. , a_n>$, $<b_1, b_2 .. , b_n>$ given an order of preferences for each element.
+            
+            \item \textbf{Output:} Pair matching (Bijection) of each element in one list to an unique element in the other list $<(a_i, b_i), (a_k, b_k) .. , (a_m, b_m)>$ such that no pair is \emph{Unstable}*.
+            
+            \item \textit{*Unstable: A matching $(a_i, b_i)$ is Unstable if both:} \begin{itemize}
+                \item[1.] $a_i$ prefers a different match $b_k$ over $b_i$
+                \item[2.] $b_k$ also prefers $a_i$ to its existing match
+            \end{itemize}
+            hold true.
+        \end{description}
+        
+        \item[ii.] Give an example for SMP
+        \begin{description}
+            \item Two distinct set of men and women $<a_1, a_2 .. , a_n>$, $<b_1, b_2 .. , b_n>$ who want to get married. 
+            \item Each candidate writes down a preference list, ranking each of the opposite gender candidate from most preferred to the least.
+
+            \centering
+            \includegraphics[scale = 0.5]{{tables.png}}
+        
+            \item 
+        
+        \end{description}
+    \end{itemize}
+    
+    
+    
+    
+    
+\section{Gale - Shapley Algorithm}
+    \begin{itemize}
+        \item[i.] Present the Gale-Shapley algorithm with a pseudocode.
+        
+        \begin{algorithm}[H]
+            \SetKwInOut{Input}{input}
+            \SetKwInOut{Output}{output}
+            
+            \Input{Two distinct sets of Males (M) and Women (W), with each having a preference list of the opposite gender candidates}
+            \Output{Pairs of $(m, w)$ where m $m\in$M and w$\in$W and there exists no two pairs of $(m_i,w_i)$ and $(m_j,w_j)$ such that  $w_j$ prefers $m_i$ to her current match and $w_i$ prefers $m_j$ to her current match simultaneously.}
+             
+            \caption{Gale - Shapley Algorithm}
+            Initialize m $\in$  M and w $\in$ W to free \;
+            \While{ $\exists$ free man m who has a woman w to propose to}{
+                w := first woman on m's list to whom m has not yet proposed\;
+                \eIf{ $\exists$ some pair (m', w) }{
+                    \If{w prefers m to m'}{
+                        m' becomes free\;
+                        (m, w) become engaged\;
+                    }
+                }{(m, w) become engaged\;}
+            }
+        \end{algorithm}
+        
+        
+        \item[ii.] Analyze the asymptotic time complexity of this algorithm. [Hint: Use the big-oh notation.]
+        
+        \begin{description}
+            Assume that the number of women and men is the same.
+            $|M| = |W| = N$ and each $m \in M$ and $w \in W$ are already initialized to free. \\ \\
+            
+            In the algorithm, each man $m$ iterates through his preference list of woman and proposes to her, where list size is $N$. (lines 2-12)
+            
+            In each iteration, woman $w$ also iterates through her preference list, of size $N$, to see if the new proposal is preferred more (line 4). If so, she leaves her previous pair and engages to the current proposer. (lines 4-11) \\ \\
+            
+            Since outer While loop is $O(N)$ and inner operation takes $O(N)$ as explained above, this algorithm has $O(N^2)$ time complexity in \emph{Worst Case Scenario}. 
+            
+            
+        \end{description}
+        
+    \end{itemize}
+    
+\end{document}
+
+
